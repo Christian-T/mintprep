@@ -5,7 +5,7 @@ This is a package for the Swiss MINT Study. It helps in scoring and combining da
 ## Installation
 ``` r
 library(devtools)
-devtools::install_github("Christian-T/genderplot", force = TRUE)
+devtools::install_github("Christian-T/mintprep", force = TRUE)
 library(genderplot)
 ```
 
