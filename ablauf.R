@@ -20,6 +20,8 @@ usethis::use_data(solution_b_pr_v1, solution_b_pr_v2,
                   solution_s_pr_v1, solution_s_po_v1,
                   internal = TRUE)
 
+usethis::use_git()
+
 devtools::load_all()
 
 
