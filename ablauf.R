@@ -1,23 +1,24 @@
 
--embed solution files in package
--if bridges v4 <- sonderfunktion
--if fs - sonderfunktion
+xembed solution files in package
+xif bridges v4 <- sonderfunktion
+xif fs - sonderfunktion
 
-dann einmal durchspielen 
+dann einmal durchspielen
 dann auf github
 
+library(car)
+library(data.table)
+library(dplyr)
 
-A typical workflow
-
-1. read in your test data
-2. calculate scores via calulate_sumscore
-3. read in student sensitive data
-4. combine files via sens <- selection_binder(LL_pr_v2, "_ll_pr2", sens)
-
-
-
-
-usethis::use_data(internal_this, internal_that, internal = TRUE)
+usethis::use_data(solution_b_pr_v1, solution_b_pr_v2,
+                  solution_b_pr_v3, solution_b_pr_v4,
+                  solution_b_po_v2, solution_b_po_v3,
+                  solution_b_po_v4,
+                  solution_ll_pr_v1, solution_ll_pr_v2,
+                  solution_ll_pr_v3,
+                  solution_ll_po_v2, solution_ll_po_v3,
+                  solution_s_pr_v1, solution_s_po_v1,
+                  internal = TRUE)
 
 devtools::load_all()
 
