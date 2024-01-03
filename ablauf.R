@@ -25,7 +25,4 @@ usethis::use_git()
 devtools::load_all()
 
 
-usethis::create_from_github(
-  "https://github.com/Christian-T/mintprep.git",
-  destdir = "//gess-fs.d.ethz.ch/home$/thurnc/Documents/Project JACOBS"
-)
+
