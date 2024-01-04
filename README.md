@@ -6,7 +6,7 @@ This is a package for the Swiss MINT Study. It helps in scoring and combining da
 ``` r
 library(devtools)
 devtools::install_github("Christian-T/mintprep", force = TRUE)
-library(mintprep)
+library(mintprep3)
 ```
 
 ## A typical workflow
