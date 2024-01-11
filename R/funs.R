@@ -1,6 +1,7 @@
 #' recode NAs
 #' @description
 #' returns file with NA set to 0
+#' @export
 recode_to_zero <- function(dat){
   demographics <- dat[ ,c(1:19)]
   data <- dat[ ,c(20:length(dat))]
@@ -12,7 +13,7 @@ recode_to_zero <- function(dat){
 #' Calculates s without creating zeros
 #' @description
 #'
-#'
+#' @export
 s <- function(x, na.rm = FALSE) {
   if (!na.rm) return(sum(x))
   if (all(is.na(x))) {
@@ -26,7 +27,7 @@ s <- function(x, na.rm = FALSE) {
 #' Helper function
 #' @description
 #'
-#'
+#' @export
 Match_score <- function(df, cor_pat){
 
   # create score
@@ -40,7 +41,7 @@ Match_score <- function(df, cor_pat){
 #' Helper function
 #' @description
 #'
-#'
+#' @export
 score <- function(df,df3,x,t){
   data <- df
   for (i in seq_along(x)){
@@ -55,7 +56,7 @@ score <- function(df,df3,x,t){
 #' Calculates mintscore
 #' @description
 #'
-#'
+#' @export
 calculate_mintscore <- function(dat){
 
   if(grepl("ss",dat$test_id[2])) {stop("STOP: Use calculate_icu for Floating and Sinking test"); return()}
@@ -161,7 +162,7 @@ calculate_mintscore <- function(dat){
 #' Calculates sumscore for other tests
 #' @description
 #'
-#'
+#' @export
 calculate_sumscore <- function(dat, solution_data){
 
   if(grepl("ss",dat$test_id[2] ) | grepl("ll",dat$test_id[2] )  |
@@ -223,7 +224,7 @@ calculate_sumscore <- function(dat, solution_data){
 #' Calculates floating sinking score
 #' @description
 #'
-#'
+#' @export
 calculate_icu <- function(dat){
   if(!grepl("ss",dat$test_id[2] ) ) {stop("STOP: Use calculate_mintscore for Bridges, Air pressure, and sound
                                                                     and calculate_sumscore for other tests"); return()}
@@ -412,7 +413,7 @@ calculate_icu <- function(dat){
 #' Binds data together
 #' @description
 #'
-#'
+#' @export
 selection_binder <- function(data, topicversion, sens){
 
   dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","student_grade","Sum")]  #CSD nötig??

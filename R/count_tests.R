@@ -1,6 +1,7 @@
 #' Counting which tests a student did
 #' @description
 #' returns some nice file
+#' @export
 count_tests <- function(pip_temp){
 
   pip_tests <- select(pip_temp, starts_with("date"))
