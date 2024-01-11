@@ -1,5 +1,6 @@
-
-
+#' Mapping students to tests and schools
+#' @description
+#' returns some nice file
 child_test_mapping <- function(filepath, sens_data){
 
   files <-list.files(filepath, recursive=TRUE, full.names = TRUE)

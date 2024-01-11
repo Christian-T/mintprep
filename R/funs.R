@@ -1,4 +1,6 @@
-#recode NAs
+#' recode NAs
+#' @description
+#' returns file with NA set to 0
 recode_to_zero <- function(dat){
   demographics <- dat[ ,c(1:19)]
   data <- dat[ ,c(20:length(dat))]
@@ -7,6 +9,10 @@ recode_to_zero <- function(dat){
 }
 
 # Berechnungsmethode mit Funktion s
+#' Calculates s without creating zeros
+#' @description
+#'
+#'
 s <- function(x, na.rm = FALSE) {
   if (!na.rm) return(sum(x))
   if (all(is.na(x))) {
@@ -17,7 +23,10 @@ s <- function(x, na.rm = FALSE) {
 }
 
 
-# function zum score bilden
+#' Helper function
+#' @description
+#'
+#'
 Match_score <- function(df, cor_pat){
 
   # create score
@@ -28,6 +37,10 @@ Match_score <- function(df, cor_pat){
   return(df$score)
 }
 
+#' Helper function
+#' @description
+#'
+#'
 score <- function(df,df3,x,t){
   data <- df
   for (i in seq_along(x)){
@@ -39,7 +52,10 @@ score <- function(df,df3,x,t){
 }
 
 
-#compare with solution
+#' Calculates mintscore
+#' @description
+#'
+#'
 calculate_mintscore <- function(dat){
 
   if(grepl("ss",dat$test_id[2])) {stop("STOP: Use calculate_icu for Floating and Sinking test"); return()}
@@ -142,7 +158,10 @@ calculate_mintscore <- function(dat){
 # calculate_mintscore(llpr_v1)
 # calculate_mintscore(bpr_v4)
 
-
+#' Calculates sumscore for other tests
+#' @description
+#'
+#'
 calculate_sumscore <- function(dat, solution_data){
 
   if(grepl("ss",dat$test_id[2] ) | grepl("ll",dat$test_id[2] )  |
@@ -201,7 +220,10 @@ calculate_sumscore <- function(dat, solution_data){
 
 
 
-
+#' Calculates floating sinking score
+#' @description
+#'
+#'
 calculate_icu <- function(dat){
   if(!grepl("ss",dat$test_id[2] ) ) {stop("STOP: Use calculate_mintscore for Bridges, Air pressure, and sound
                                                                     and calculate_sumscore for other tests"); return()}
@@ -387,7 +409,10 @@ calculate_icu <- function(dat){
 }
 
 
-# calculate_icu(sspoA)
+#' Binds data together
+#' @description
+#'
+#'
 selection_binder <- function(data, topicversion, sens){
 
   dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","student_grade","Sum")]  #CSD nötig??
