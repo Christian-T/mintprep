@@ -18,6 +18,7 @@ library(mintprep3)
 5. Combine files via `sens <- selection_binder(LL_pr_v2, "_ll_pr2", sens)`
 for all files you want to merge. 
 
+Use `pip <- child_test_mapping(filepath, sens)`to create a data frame that shows which student did which test when and at which school. Use `count_tests(pip)` to extract just the info which student did which test.
 
 ##Citation
 --------
