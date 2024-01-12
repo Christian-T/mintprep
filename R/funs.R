@@ -31,6 +31,7 @@ s <- function(x, na.rm = FALSE) {
 #' other function to concatenate columns
 #' @param df  data frame
 #' @param cor_pat ??
+#' @importFrom magrittr %>%
 #' @export
 Match_score <- function(df, cor_pat){
 
@@ -227,7 +228,7 @@ calculate_sumscore <- function(dat, solution_data){
 
 #' Calculates floating sinking score
 #' @description
-#'
+#' @importFrom magrittr %>%
 #' @export
 calculate_icu <- function(dat){
   if(!grepl("ss",dat$test_id[2] ) ) {stop("STOP: Use calculate_mintscore for Bridges, Air pressure, and sound
@@ -300,7 +301,7 @@ calculate_icu <- function(dat){
   ssprA$ICU_16 <- c(ifelse(ssprA["X13.ball_ss.1"] == 0 & ssprA["X13.ball_ss.2"] == 0 & ssprA["X13.ball_ss.3"] == 0 & ssprA["X13.ball_ss.4"] == 1 & ssprA["X13.ball_ss.5"] == 0, 1, 0))
   ssprA$ICU_17 <- c(ifelse(ssprA["X14.schiff_aus_eisen.1"] == 0 & ssprA["X14.schiff_aus_eisen.3"] == 0 & ssprA["X14.schiff_aus_eisen.5"] == 0 & ssprA["X14.schiff_aus_eisen.6"] == 0 & (ssprA["X14.schiff_aus_eisen.2"] == 1 | ssprA["X14.schiff_aus_eisen.6"] == 1), 1, 0))
 
-  ssprA$ICU <- rowSums(select(ssprA, tidyr::contains("ICU_")))
+  ssprA$ICU <- rowSums(dplyr::select(ssprA, tidyr::contains("ICU_")))
 
   #Make regular data frame columns from lists resulting from ifelse-functions for MCs and ICU
   ssprA$misconceptions <- c(ssprA$misconceptions)
@@ -310,7 +311,7 @@ calculate_icu <- function(dat){
 
   ssprA$date <- paste(ssprA$test_day, ssprA$test_month, ssprA$test_year, sep=".")
 
-  ssprA <- ssprA %>% select("test_id","school_id","teacher_id","date","CYCLESTARTDATE","student_id","class_name","student_grade","student_age",  "student_gender","group", "ICU_1", "ICU_2",
+  ssprA <- ssprA %>% dplyr::select("test_id","school_id","teacher_id","date","CYCLESTARTDATE","student_id","class_name","student_grade","student_age",  "student_gender","group", "ICU_1", "ICU_2",
                             "ICU_3", "ICU_4", "ICU_5", "ICU_6", "ICU_7", "ICU_8", "ICU_9",
                             "ICU_10", "ICU_11", "ICU_12", "ICU_13", "ICU_14", "ICU_15", "ICU_16",
                             "ICU_17", "Sum","misconceptions","everydayconceptions",
@@ -415,11 +416,11 @@ calculate_icu <- function(dat){
 
 #' Binds data together
 #' @description
-#'
+#' @importFrom magrittr %>%
 #' @export
 selection_binder <- function(data, topicversion, sens){
 
-  dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","group.pr", "group.po", "student_grade","Sum")]  #CSD nötig??
+  dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","group", "student_grade","Sum")]  #CSD nötig??
 
 
   dat$date <- as.Date(dat$date, format="%d.%m.%Y")
@@ -459,6 +460,7 @@ count_tests <- function(pip_temp){
 #' Mapping students to tests and schools
 #' @description
 #' returns some nice file
+#' @importFrom magrittr %>%
 #' @export
 child_test_mapping <- function(filepath, sens_data){
 
