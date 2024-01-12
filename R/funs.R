@@ -416,11 +416,13 @@ calculate_icu <- function(dat){
 #' @export
 selection_binder <- function(data, topicversion, sens){
 
-  dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","student_grade","Sum")]  #CSD nötig??
+  dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","group.pr", "group.po", "student_grade","Sum")]  #CSD nötig??
+
+
   dat$date <- as.Date(dat$date, format="%d.%m.%Y")
   dat2 <- dat %>% group_by(student_id) %>% arrange(desc(date)) %>%  filter(row_number() ==1) %>% ungroup
 
-  names(dat2)[2:6] <- paste0(names(dat2)[2:6],topicversion)
+  names(dat2)[2:8] <- paste0(names(dat2)[2:8],topicversion)
   names(dat2)[1] <- "student_ID"
 
   dat3 <- merge(sens, dat2, by="student_ID",all=TRUE)
