@@ -7,5 +7,5 @@
 calculate_mintscore(dat)
 }
 \description{
-Calculates mintscore
+returns scored dataset for bridges, sound, or air pressure
 }

@@ -6,6 +6,11 @@
 \usage{
 Match_score(df, cor_pat)
 }
+\arguments{
+\item{df}{data frame}
+
+\item{cor_pat}{??}
+}
 \description{
-Helper function
+other function to concatenate columns
 }

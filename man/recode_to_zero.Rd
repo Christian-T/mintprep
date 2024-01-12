@@ -6,6 +6,9 @@
 \usage{
 recode_to_zero(dat)
 }
+\arguments{
+\item{dat}{Dataset from database}
+}
 \description{
 returns file with NA set to 0
 }

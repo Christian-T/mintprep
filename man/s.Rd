@@ -6,6 +6,9 @@
 \usage{
 s(x, na.rm = FALSE)
 }
+\arguments{
+\item{x}{vector of data}
+}
 \description{
-Calculates s without creating zeros
+returns sum correctly
 }

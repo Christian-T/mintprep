@@ -7,5 +7,5 @@
 score(df, df3, x, t)
 }
 \description{
-Helper function
+returns dataframe with "_score" appended
 }

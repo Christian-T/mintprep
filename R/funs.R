@@ -1,6 +1,7 @@
 #' recode NAs
 #' @description
 #' returns file with NA set to 0
+#' @param dat Dataset from database
 #' @export
 recode_to_zero <- function(dat){
   demographics <- dat[ ,c(1:19)]
@@ -12,7 +13,8 @@ recode_to_zero <- function(dat){
 # Berechnungsmethode mit Funktion s
 #' Calculates s without creating zeros
 #' @description
-#'
+#' returns sum correctly
+#' @param x vector of data
 #' @export
 s <- function(x, na.rm = FALSE) {
   if (!na.rm) return(sum(x))
@@ -26,7 +28,9 @@ s <- function(x, na.rm = FALSE) {
 
 #' Helper function
 #' @description
-#'
+#' other function to concatenate columns
+#' @param df  data frame
+#' @param cor_pat ??
 #' @export
 Match_score <- function(df, cor_pat){
 
@@ -40,7 +44,7 @@ Match_score <- function(df, cor_pat){
 
 #' Helper function
 #' @description
-#'
+#' returns dataframe with "_score" appended
 #' @export
 score <- function(df,df3,x,t){
   data <- df
@@ -55,7 +59,7 @@ score <- function(df,df3,x,t){
 
 #' Calculates mintscore
 #' @description
-#'
+#'  returns scored dataset for bridges, sound, or air pressure
 #' @export
 calculate_mintscore <- function(dat){
 
@@ -389,7 +393,6 @@ calculate_icu <- function(dat){
 
   library(tidyr)
 
-
   sspoA <- score(sspoA, sspoA, x, t)
   sspoA$sum_cor_sspoA_Transfer <- rowSums(sspoA[, c("X12_score", "X13_score", "X15_score", "X16_score", "X17_score", "X18_score")])
   sspoA$sum_cor_sspoA_Transfer <- ifelse(sspoA$X14.unterschiedliche_wuerfel.1 == 0 & sspoA$X14.unterschiedliche_wuerfel.2 == 0 & sspoA$X14.unterschiedliche_wuerfel.3 == 1 & sspoA$X14.unterschiedliche_wuerfel.4 == 1, sspoA$sum_cor_sspoA_Transfer + 0.5, sspoA$sum_cor_sspoA_Transfer)
@@ -464,7 +467,7 @@ child_test_mapping <- function(filepath, sens_data){
 
   lapply(data, function (x) x[c('student_id','test_id','school_id','teacher_id','test_year','test_month', 'test_day', 'group')]) -> mar3
   mar4 <- do.call("rbind", mar3)
-  tail(mar4)#that is already quite good!
+  #tail(mar4)#that is already quite good!
   mar4$date <- paste(mar4$test_day,mar4$test_month,mar4$test_year, sep=".")
   mar4$date <- as.Date(mar4$date, format="%d.%m.%Y")
 
@@ -479,10 +482,7 @@ child_test_mapping <- function(filepath, sens_data){
 
   pip_temp <- pip
 
-
-
-  mar4 <- mar4[,c("student_id","test_id","school_teacher_year", "group", "date")]
-
+  mar4 <- mar4[,c("student_id","test_id","school_id_teacher_id_year", "group", "date")]
 
   for(i in unique(mar4$test_id)){
     sub <- subset(mar4, mar4$test_id ==i)
