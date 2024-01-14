@@ -8,4 +8,5 @@ calculate_mintscore(dat)
 }
 \description{
 returns scored dataset for bridges, sound, or air pressure
+@importFrom data.table inrange
 }

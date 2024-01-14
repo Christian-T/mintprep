@@ -61,6 +61,7 @@ score <- function(df,df3,x,t){
 #' Calculates mintscore
 #' @description
 #'  returns scored dataset for bridges, sound, or air pressure
+#'  @importFrom data.table inrange
 #' @export
 calculate_mintscore <- function(dat){
 
@@ -80,7 +81,7 @@ calculate_mintscore <- function(dat){
     for(i in 1:nrow(dat)){
       A1 <- dat[i,c("X01.brueckennamen.1","X01.brueckennamen.2","X01.brueckennamen.3","X01.brueckennamen.4")]
       A1[is.na(A1)] <- 0
-      if(all(inrange(unlist(A1),0,1))) {   #min(A1)==0 & max(A1)==1){
+      if(all(data.table::inrange(unlist(A1),0,1))) {   #min(A1)==0 & max(A1)==1){
         dat$X01.brueckennamen.1[i] <- car::recode(dat$X01.brueckennamen.1[i],"1=2");
         #1=1;
         dat$X01.brueckennamen.3[i] <- car::recode(dat$X01.brueckennamen.3[i],"1=4");
