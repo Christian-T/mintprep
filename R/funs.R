@@ -89,7 +89,7 @@ calculate_mintscore <- function(dat){
 
       A2 <- dat[i, c("X02.brueckenteile.1", "X02.brueckenteile.2","X02.brueckenteile.3","X02.brueckenteile.4")]
       A2[is.na(A2)] <- 0
-      if(all(inrange(unlist(A2),0,1))){ #min(A2)==0 & max(A2)==1){
+      if(all(data.table::inrange(unlist(A2),0,1))){ #min(A2)==0 & max(A2)==1){
         dat$X02.brueckenteile.1[i] <- car::recode(dat$X02.brueckenteile.1[i],"1=3");
         #1=1
         dat$X02.brueckenteile.3[i] <- car::recode(dat$X02.brueckenteile.3[i],"1=2");
@@ -102,7 +102,7 @@ calculate_mintscore <- function(dat){
      for(i in 1:nrow(dat)){
       A1 <- dat[i,c("X01.brueckennamen.1","X01.brueckennamen.2","X01.brueckennamen.3","X01.brueckennamen.4")]
       A1[is.na(A1)] <- 0
-      if(all(inrange(unlist(A1),0,1))){ #min(A1)==0 & max(A1)==1){
+      if(all(data.table::inrange(unlist(A1),0,1))){ #min(A1)==0 & max(A1)==1){
         dat$X01.brueckennamen.1[i] <- car::recode(dat$X01.brueckennamen.1[i],"1=2");
         #1=1;
         dat$X01.brueckennamen.3[i] <- car::recode(dat$X01.brueckennamen.3[i],"1=4");
@@ -110,7 +110,7 @@ calculate_mintscore <- function(dat){
 
       A2 <- dat[i, c("X02.brueckenteile.1", "X02.brueckenteile.2","X02.brueckenteile.3","X02.brueckenteile.4")]
       A2[is.na(A2)] <- 0
-      if(all(inrange(unlist(A2),0,1))){ #min(A2)==0 & max(A2)==1){
+      if(all(data.table::inrange(unlist(A2),0,1))){ #min(A2)==0 & max(A2)==1){
         dat$X02.brueckenteile.1[i] <- car::recode(dat$X02.brueckenteile.1[i],"1=3");
         #1=1
         dat$X02.brueckenteile.3[i] <- car::recode(dat$X02.brueckenteile.3[i],"1=2");
@@ -502,3 +502,106 @@ child_test_mapping <- function(filepath, sens_data){
   return(pip_temp)
 }
 
+
+
+mycohen_fun <- function(topic, bc_data){
+  # "ll", "b", "s", "f"
+  group <- paste0("group.pr_",topic)
+  grade <- paste0("student_grade.pr_",topic)
+  LR_pr <- paste0("LR_",topic,"pr")
+  LR_po <- paste0("LR_",topic,"po")
+
+  dat2 <- data.frame(group=bc_data[,group],
+                     grade = bc_data[,grade],
+                     LR_pr = bc_data[,LR_pr],
+                     LR_po = bc_data[,LR_po])
+
+  Cohen12_Int <- cohen.d(dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(1,2)), "LR_po"],
+                         dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(1,2)), "LR_pr"],
+                         na.rm=T, paired=TRUE)
+  Cohen34_Int <- cohen.d(dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(3,4)), "LR_po"],
+                         dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(3,4)), "LR_pr"],
+                         na.rm=T, paired=TRUE)
+  Cohen56_Int <- cohen.d(dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(5,6)), "LR_po"],
+                         dat2[which(dat2$group=="Treatment 1" &
+                                      dat2$grade %in% c(5,6)), "LR_pr"],
+                         na.rm=T, paired=TRUE)
+
+  Cohen12_Cntrl <- cohen.d(dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(1,2)), "LR_po"],
+                           dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(1,2)), "LR_pr"],
+                           na.rm=T, paired=TRUE)
+  Cohen34_Cntrl <- cohen.d(dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(3,4)), "LR_po"],
+                           dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(3,4)), "LR_pr"],
+                           na.rm=T, paired=TRUE)
+  Cohen56_Cntrl <- cohen.d(dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(5,6)), "LR_po"],
+                           dat2[which(dat2$group=="Control 1" &
+                                        dat2$grade %in% c(5,6)), "LR_pr"],
+                           na.rm=T, paired=TRUE)
+
+  M12_Int_pr <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(1,2)), "LR_pr"], na.rm=T)
+  M34_Int_pr <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(3,4)), "LR_pr"], na.rm=T)
+  M56_Int_pr <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(5,6)), "LR_pr"], na.rm=T)
+
+  M12_Int_po <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(1,2)), "LR_po"], na.rm=T)
+  M34_Int_po <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(3,4)), "LR_po"], na.rm=T)
+  M56_Int_po <- mean(dat2[which(dat2$group=="Treatment 1" &
+                                  dat2$grade %in% c(5,6)), "LR_po"], na.rm=T)
+
+  M12_Cntrl_pr <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(1,2)), "LR_pr"], na.rm=T)
+  M34_Cntrl_pr <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(3,4)), "LR_pr"], na.rm=T)
+  M56_Cntrl_pr <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(5,6)), "LR_pr"], na.rm=T)
+
+  M12_Cntrl_po <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(1,2)), "LR_po"], na.rm=T)
+  M34_Cntrl_po <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(3,4)), "LR_po"], na.rm=T)
+  M56_Cntrl_po <- mean(dat2[which(dat2$group=="Control 1" &
+                                    dat2$grade %in% c(5,6)), "LR_po"], na.rm=T)
+
+  retoure <- data.frame(group = c("Int","Int","Int", "Control","Control","Control"),
+                        grade = c("12", "34", "56", "12", "34", "56"),
+                        MPre = c(round(M12_Int_pr, 2), round(M34_Int_pr,2), round(M56_Int_pr,2),
+                                 round(M12_Cntrl_pr,2), round(M34_Cntrl_pr,2), round(M56_Cntrl_pr,2)),
+                        MPo = c(round(M12_Int_po,2), round(M34_Int_po,2), round(M56_Int_po,2),
+                                round(M12_Cntrl_po,2),  round(M34_Cntrl_po,2), round(M56_Cntrl_po,2)),
+                        Cohen = c(round(Cohen12_Int$estimate,2),  round(Cohen34_Int$estimate,2),
+                                  round(Cohen56_Int$estimate,2),
+                                  round(Cohen12_Cntrl$estimate,2),  round(Cohen34_Cntrl$estimate,2),
+                                  round(Cohen56_Cntrl$estimate,2)),
+                        CI_l = c(round(Cohen12_Int$conf.int[1], 2),  round(Cohen34_Int$conf.int[1],2),
+                                 round(Cohen56_Int$conf.int[1],2),
+                                 round(Cohen12_Cntrl$conf.int[1],2),  round(Cohen34_Cntrl$conf.int[1],2),
+                                 round(Cohen56_Cntrl$conf.int[1],2)),
+                        CI_u = c(round(Cohen12_Int$conf.int[2], 2),  round(Cohen34_Int$conf.int[2],2),
+                                 round(Cohen56_Int$conf.int[2],2),
+                                 round(Cohen12_Cntrl$conf.int[2],2),  round(Cohen34_Cntrl$conf.int[2],2),
+                                 round(Cohen56_Cntrl$conf.int[2],2))
+  )
+
+  return(retoure)
+
+
+}
+
+mycohen_fun("ll")
+mycohen_fun("s")
+mycohen_fun("f")  # keine CG 1-2
+mycohen_fun("b")  # keine CG 1-2 und 5-6
