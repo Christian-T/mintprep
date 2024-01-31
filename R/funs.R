@@ -420,13 +420,17 @@ calculate_icu <- function(dat){
 #' @description
 #' @importFrom magrittr %>%
 #' @export
-selection_binder <- function(data, topicversion, sens){
+selection_binder <- function(data, topicversion, sens, select="newest"){
 
   dat <- data[ ,c("student_id","school_id","date","CYCLESTARTDATE","group", "student_grade","Sum")]  #CSD nötig??
 
-
   dat$date <- as.Date(dat$date, format="%d.%m.%Y")
-  dat2 <- dat %>% group_by(student_id) %>% arrange(desc(date)) %>%  filter(row_number() ==1) %>% ungroup
+  if(select=="oldest"){
+    dat2 <- dat %>% group_by(student_id) %>% arrange(date) %>%  filter(row_number() ==1) %>% ungroup
+    }else if(select=="newest"){
+    dat2 <- dat %>% group_by(student_id) %>% arrange(desc(date)) %>%  filter(row_number() ==1) %>% ungroup
+
+  } else print("Select whether you want the oldest or newest test if a student did multiple ones")
 
   names(dat2)[2:8] <- paste0(names(dat2)[2:8],topicversion)
   names(dat2)[1] <- "student_ID"
@@ -435,6 +439,32 @@ selection_binder <- function(data, topicversion, sens){
   return(dat3)
 
 }
+
+#
+# date_min <- function(dat){
+#   min(dat[, c("date_pr","date_po")], na.rm = TRUE)
+# }
+#
+# pre_po_binder <- function(dat_pr, dat_po, topicversion, sens){
+#
+#   dat$date_pr <- as.Date(paste(dat$test_day.pr, dat$test_month.pr, dat$test_year.pr, sep=".") , format="%d.%m.%Y")
+#   dat$date_po <- as.Date(paste(dat$test_day.po, dat$test_month.po, dat$test_year.po, sep=".") , format="%d.%m.%Y")
+#   dat$date_min <- apply(dat[,c("date_pr","date_po")],1,FUN=function(x)min(x, na.rm=TRUE))
+#   dat2 <- dat %>% group_by(student_id) %>% arrange(date_min) %>%  filter(row_number() ==1) %>% ungroup  # we select the oldest test of pre, or posttest. as it is merged by CSD, this is the oldest test data available
+#
+#   sum_names <- grep("LR", names(dat2), value=TRUE)
+#   # sum_names <- grep("sum", names(dat2), value=TRUE)
+#   #if(length(grep("ransfer", names(dat2))) > 0){sum_names <- sum_names[-grep("ransfer", sum_names)]}
+#   names(dat2)[1] <- "student_ID"
+#   dat2 <- dat2 %>% select("student_ID","CYCLESTARTDATE","group.pr", "group.po",  "student_grade.pr","teacher_id.pr",
+#                           all_of(sum_names)) # add teacher
+#
+#   names(dat2)[2:6] <- paste0(names(dat2)[2:6],topicversion)
+#
+#   dat3 <- base::merge(sens, dat2, by="student_ID",all=TRUE)
+#   return(dat3)
+# }
+
 
 
 #' Counting which tests a student did
@@ -507,15 +537,15 @@ child_test_mapping <- function(filepath, sens_data){
 
 mycohen_fun <- function(topic, bc_data){
   # "ll", "b", "s", "f"
-  group <- paste0("group.pr_",topic)
-  grade <- paste0("student_grade.pr_",topic)
-  LR_pr <- paste0("LR_",topic,"pr")
-  LR_po <- paste0("LR_",topic,"po")
+  groupv <- paste0("group.pr_",topic)
+  gradev <- paste0("student_grade.pr_",topic)
+  LR_prv <- paste0("LR_",topic,"pr")
+  LR_pov <- paste0("LR_",topic,"po")
 
-  dat2 <- data.frame(group=bc_data[,group],
-                     grade = bc_data[,grade],
-                     LR_pr = bc_data[,LR_pr],
-                     LR_po = bc_data[,LR_po])
+  dat2 <- data.frame(group = bc_data[,groupv],
+                     grade = bc_data[,gradev],
+                     LR_pr = bc_data[,LR_prv],
+                     LR_po = bc_data[,LR_pov])
 
   Cohen12_Int <- cohen.d(dat2[which(dat2$group=="Treatment 1" &
                                       dat2$grade %in% c(1,2)), "LR_po"],
@@ -602,7 +632,7 @@ mycohen_fun <- function(topic, bc_data){
 
 }
 
-mycohen_fun("ll")
-mycohen_fun("s")
-mycohen_fun("f")  # keine CG 1-2
-mycohen_fun("b")  # keine CG 1-2 und 5-6
+# mycohen_fun("ll")
+# mycohen_fun("s")
+# mycohen_fun("f")  # keine CG 1-2
+# mycohen_fun("b")  # keine CG 1-2 und 5-6
