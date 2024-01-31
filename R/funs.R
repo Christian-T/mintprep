@@ -61,6 +61,7 @@ score <- function(df,df3,x,t){
 #' Calculates mintscore
 #' @description
 #'  returns scored dataset for bridges, sound, or air pressure
+#'  See calculate_icu for Floating & Sinking
 #'  @importFrom data.table inrange
 #' @export
 calculate_mintscore <- function(dat){
